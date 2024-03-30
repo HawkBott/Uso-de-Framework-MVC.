@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap CSS y FontAwesome para iconos -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="~/styles/Administrator/StyleAdministrador.css" rel="stylesheet" type="text/css" />
+    <!-- Agrega Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <header>
+        <!-- Navbar mejorado con dropdowns y iconos, ahora en color negro -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="Index">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupported" aria-controls="navbarSupported" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupported">
+                <ul class="navbar-nav mr-auto">
+                    <!-- Dropdown para acciones de Productos -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Productos <i class="fas fa-boxes"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="productosDropdown">
+                            <a class="dropdown-item" href="AltaProducto">Alta de un Producto</a>
+                            <a class="dropdown-item" href="ListarProductos">Listado de Productos</a>
+                            <a class="dropdown-item" href="ListarDetallesProductos">Detalles de Productos</a>
+                            <a class="dropdown-item" href="ModificarProducto">Modificación de un Producto</a>
+                            <a class="dropdown-item" href="#">Eliminación de un Producto</a>
+                        </div>
+                    </li>
+                    <!-- Enlaces directos para usuarios y compras -->
+                    <li class="nav-item"><a class="nav-link" href="MostrarUsuarios">Listado de Usuarios <i class="fas fa-users"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Artículos Comprados <i class="fas fa-shopping-cart"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Clientes por Artículo <i class="fas fa-user-tag"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Clientes por Artículo <i class="fas fa-user-tag"></i></a></li>
+                </ul>
+
+            </div>
+        </nav>
+    </header>
+
+
+
+
+    <div class="container" style="margin-top: 70px;">
+        @RenderBody()
+    </div>
+
+    <footer class="mt-5">
+        <p class="text-center">Tienda en Línea ©</p>
+    </footer>
+
+    <!-- Bootstrap JS, Popper.js, y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿@model System.Data.DataTable
+
+<h2>Lista de Usuarios</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre Completo</th>
+            <th>Email</th>
+            <th>Rol Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow row in Model.Rows)
+        {
+            <tr>
+                <td>@row["Id"]</td>
+                <td>@row["NombreCompleto"]</td>
+                <td>@row["MyEmail"]</td>
+                <td>@row["RolId"]</td>
+            </tr>
+        }
+    </tbody>
+</table>

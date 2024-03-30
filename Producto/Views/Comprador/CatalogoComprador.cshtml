@@ -1,0 +1,43 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Productos";
+  
+}
+
+<h2>Catálogo de Artículos</h2>
+
+<form action="@Url.Action("CatalogoComprador", "Comprador")" method="post">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Cantidad Disponible</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Cantidad a Comprar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (System.Data.DataRow row in Model.Rows)
+                {
+                    <tr>
+                        <td><img src="@Url.Content("~/assets/imagenes/" + row["Foto"].ToString())" alt="@row["Nombre"]" class="img-thumbnail" style="width: 100px; height: 100px;" /></td>
+                        <td>@row["Nombre"]</td>
+                        <td>@row["Cantidad"]</td>
+                        <td>@row["Descripcion"]</td>
+                        <td>@row["Precio"]</td>
+                        <td>
+                            <input type="number" name="cantidad_@row["Id"]" min="0" max="@row["Cantidad"]" value="0" />
+                            <input type="checkbox" name="seleccion_@row["Id"]" value="@row["Id"]" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+</form>
+

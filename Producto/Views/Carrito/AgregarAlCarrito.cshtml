@@ -1,0 +1,28 @@
+﻿@model Producto.Entities.Producto
+@{
+    ViewBag.Title = "Agregar Al Carrito";
+}
+
+<h2>VerDetalles</h2>
+<div>
+    @if (Model != null)
+    {
+        <img src="@Model.Foto" alt="Foto del producto" />
+        <h2>@Model.Nombre</h2>
+        <p>Descripción: @Model.Descripcion</p>
+        <p>Precio: @Model.Precio.ToString("C")</p>
+        <p>Cantidad disponible: @Model.Cantidad</p>
+
+        using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+        {
+            @Html.Hidden("productoId", Model.Id)
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" name="cantidad" min="1" max="@Model.Cantidad" value="1" />
+            <input type="submit" value="Agregar al carrito" />
+        }
+    }
+    else
+    {
+        <p>No se pudo cargar el producto.</p>
+    }
+</div>

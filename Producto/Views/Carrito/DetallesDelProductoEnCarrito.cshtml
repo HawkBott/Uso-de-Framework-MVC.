@@ -1,0 +1,71 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "Detalles del Producto en el Carrito";
+    Layout = "~/Views/Shared/Comprador/_Layout.cshtml";
+}
+
+<h2 id="tituloCarrito">Detalles del Producto en el Carrito</h2>
+
+<table id="tablaCarrito" class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Foto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (System.Data.DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td>@row["Id"]</td>
+                    <td>@row["Nombre"]</td>
+                    <td>@row["Cantidad"]</td>
+                    <td>@row["Descripcion"]</td>
+                    <td>@row["Precio"]</td>
+                    <td>
+                        <img src="@Url.Content("~/assets/imagenes/" + row["Foto"])" alt="Foto del producto" class="imgProducto" />
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No hay productos en el carrito.</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<div id="totalCarrito">
+    @if (Decimal.TryParse(ViewBag.Total, out decimal total))
+    {
+        <p>Total a Pagar: @total</p>
+    }
+    else
+    {
+        <p>@ViewBag.Total</p>
+    }
+</div>
+
+
+<div id="accionesCarrito">
+    @using (Html.BeginForm("RealizarCompra", "Carrito", FormMethod.Post))
+    {
+        <input type="submit" value="Realizar Compra" id="btnRealizarCompra" />
+    }
+    <br />
+    @using (Html.BeginForm("CancelarCompra", "Carrito", FormMethod.Post))
+    {
+        @Html.Hidden("usuarioId", (int)Session["UsuarioId"])
+        <input type="submit" value="Cancelar Compra" id="btnCancelarCompra" />
+    }
+</div>
+

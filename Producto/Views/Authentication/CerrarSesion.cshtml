@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Cerrar sesion";
+}
+
+<h2>Bienvenido, @ViewBag.Email</h2>
+
+<!-- Botón para cerrar la sesión -->
+<form action="@Url.Action("CerrarSesion", "Authentication")" method="post">
+    <input type="hidden" name="myEmail" value="@ViewBag.Email" />
+    <input type="submit" value="Cerrar Sesión" />
+</form>

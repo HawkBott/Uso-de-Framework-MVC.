@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Listar Productos";
+    Layout = "~/Views/Shared/Administrator/_Layout.cshtml";
+}
+
+<h2 id="titulo-modificar-producto">Modificar Producto</h2>
+
+<p id="mensaje-modificacion">@ViewBag.Message</p>
+
+<form id="formulario-modificacion" method="post" action="@Url.Action("ModificarProducto", "Administrator")">
+    <label for="id-producto">Id:</label>
+    <input type="number" id="id-producto" name="id" required />
+
+    <label for="nombre-producto">Nombre:</label>
+    <input type="text" id="nombre-producto" name="nombre" required />
+
+    <label for="cantidad-producto">Cantidad:</label>
+    <input type="number" id="cantidad-producto" name="cantidad" required />
+
+    <label for="descripcion-producto">Descripcion:</label>
+    <textarea id="descripcion-producto" name="descripcion"></textarea>
+
+    <label for="precio-producto">Precio:</label>
+    <input type="number" id="precio-producto" name="precio" step="0.01" required />
+
+    <label for="foto-producto">Foto (URL):</label>
+    <input type="text" id="foto-producto" name="foto" />
+
+    <input type="submit" id="boton-actualizar" value="Actualizar" />
+</form>

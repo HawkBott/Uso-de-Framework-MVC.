@@ -1,0 +1,18 @@
+﻿@model Producto.Entities.Producto
+@{
+    ViewBag.Title = "Catálogo de Artículos";
+    Layout = "~/Views/Shared/Comprador/_Layout.cshtml";
+}
+<h2 id="nombreProducto">@Model.Nombre</h2>
+<p id="descripcionProducto">@Model.Descripcion</p>
+<p id="precioProducto">@Model.Precio.ToString("C")</p>
+
+@using (Html.BeginForm("AgregarAlCarrito", "Carrito", FormMethod.Post))
+{
+    @Html.Hidden("productoId", Model.Id)
+    <div id="seccionCantidad">
+        <label for="cantidadProducto">Cantidad:</label>
+        <input type="number" id="cantidadProducto" name="cantidad" min="1" max="@Model.Cantidad" value="0" />
+    </div>
+    <input type="submit" id="btnAgregarCarrito" value="Agregar al carrito" />
+}

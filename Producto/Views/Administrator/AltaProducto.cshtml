@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "AltaProducto";
+    Layout = "~/Views/Shared/Administrator/_Layout.cshtml";
+}
+
+<div class="container" id="altaProductoContainer">
+    <div class="card" id="altaProductoCard">
+        <h2 class="text-center" id="tituloAltaProducto">Alta de Producto</h2>
+        <form action="/Administrator/AltaProducto" method="post" id="formularioAltaProducto">
+            <div class="form-group" id="grupoNombre">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" class="form-control">
+            </div>
+            <div class="form-group" id="grupoCantidad">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" name="cantidad" class="form-control">
+            </div>
+            <div class="form-group" id="grupoDescripcion">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" class="form-control"></textarea>
+            </div>
+            <div class="form-group" id="grupoPrecio">
+                <label for="precio">Precio:</label>
+                <input type="number" step="0.01" id="precio" name="precio" class="form-control">
+            </div>
+            <div class="form-group" id="grupoFoto">
+                <label for="foto">URL de la Foto:</label>
+                <input type="text" id="foto" name="foto" class="form-control">
+            </div>
+            <input type="submit" value="Enviar" class="btn btn-primary btn-submit" id="botonEnviar">
+        </form>
+    </div>
+</div>

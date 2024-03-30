@@ -1,0 +1,22 @@
+﻿@model List<Producto.Entities.Producto>
+
+@{
+    ViewBag.Title = "Catálogo de Artículos";
+    Layout = "~/Views/Shared/Comprador/_Layout.cshtml";
+}
+
+<h1 class="catalogo-titulo">Catálogo de Artículos</h1>
+
+<div class="catalogo-contenedor">
+    @foreach (var producto in Model)
+    {
+        <div class="catalogo-producto">
+            <h2 class="producto-nombre">@producto.Nombre</h2>
+            <p class="producto-precio">@producto.Precio.ToString("C")</p>
+            <!-- Cambio aquí: Usamos Url.Content y especificamos la ruta de la carpeta assets/imagenes -->
+            <img class="producto-imagen" src="@Url.Content($"~/assets/imagenes/{producto.Foto}")" alt="Imagen del producto" />
+            <a class="producto-detalles" href="@Url.Action("VerDetalles", "Comprador", new { id = producto.Id })">Ver detalles</a>
+        </div>
+    }
+</div>
+
