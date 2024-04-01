@@ -157,26 +157,42 @@ namespace Producto.Capa.BLL
         //----------------------ALL CARRITO------------------------//
 
         //Metodo para agregar un producto al carrito tomando como referencia el id del producto y el id del comprador
-        public void AgregarAlCarrito(int usuarioId, int productoId, int cantidad)
+        public void AgregarProductoAlCarrito(int usuarioId, int productoId, int cantidad)
         {
-            Debug.WriteLine($"Iniciando AgregarAlCarrito en la capa de negocios. UsuarioId: {usuarioId}, ProductoId: {productoId}, Cantidad: {cantidad}");
-            try
-            {
-                datos.AgregarAlCarrito(usuarioId, productoId, cantidad);
-                Debug.WriteLine("AgregarAlCarrito en la capa de negocios completado con éxito.");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error en AgregarAlCarrito en la capa de negocios: {ex.Message}");
-                throw; // O maneja la excepción de manera que consideres apropiada
-            }
+            // Aquí puedes agregar cualquier lógica de negocio adicional necesaria
+            // antes de interactuar con la base de datos.
+
+            datos.AgregarProductoAlCarrito(usuarioId, productoId, cantidad);
         }
+
+
+        public void RealizarCompra(int usuarioId)
+        {
+            // Aquí puedes agregar cualquier lógica de negocio adicional necesaria
+            // antes de interactuar con la base de datos.
+
+            datos.RealizarCompra(usuarioId);
+        }
+
+
+
+        public void CancelarCompra(int usuarioId)
+        {
+            datos.CancelarCompra(usuarioId);
+        }
+
+
 
 
         //Metodo para obtener los detatalles del producto que se visualizara antes de confirmar la compra
         public DataTable ObtenerDetallesDelProductoEnCarrito(int usuarioId)
         {
-            return datos.ObtenerDetallesDelProductoEnCarrito(usuarioId);
+            // Llama al método de la capa de datos para obtener los detalles del producto
+            DataTable dt = datos.ObtenerDetallesDelProductoEnCarrito(usuarioId);
+
+            // Aquí puedes agregar cualquier lógica de negocio adicional que necesites
+
+            return dt;
         }
 
 
@@ -214,32 +230,11 @@ namespace Producto.Capa.BLL
 
 
 
-        public void RegistrarCompra(int carritoId)
-        {
-            try
-            {
-                datos.RegistrarCompra(carritoId);
-            }
-            catch (Exception ex)
-            {
-                // Manejar excepción
-                throw new Exception("Error al registrar la compra: " + ex.Message);
-            }
-        }
 
 
-        public void CancelarCompra(int usuarioId)
-        {
-            try
-            {
-                datos.CancelarCompra(usuarioId);
-            }
-            catch (Exception ex)
-            {
-                // Manejar excepción
-                throw new Exception("Error al cancelar la compra: " + ex.Message);
-            }
-        }
+
+
+
 
 
 
@@ -284,15 +279,18 @@ namespace Producto.Capa.BLL
 
 
 
+
+
+
+
         
 
 
 
-
-
-
-
-
+        public List<Entities.Producto> ObtenerProductosCarrito(int usuarioId)
+        {
+            return datos.ObtenerProductosCarrito(usuarioId);
+        }
 
 
     }

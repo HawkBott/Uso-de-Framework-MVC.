@@ -4,9 +4,14 @@
     Layout = "~/Views/Shared/Administrator/_Layout.cshtml";
 }
 
+@helper FormatCurrency(decimal amount)
+{
+    @String.Format("${0:N2}", amount)
+}
+
 <div class="container" id="productos-container">
     <div class="header" id="productos-header">
-        <h2>Detalle de Productos</h2>
+        <h2>Listado De Productos</h2>
     </div>
 
     <div class="table-responsive" id="productos-table-responsive">
@@ -24,7 +29,7 @@
                     <tr class="productos-row">
                         <td>@item.Id</td>
                         <td>@item.Nombre</td>
-                        <td>@item.Precio</td>
+                        <td>@FormatCurrency(item.Precio)</td>
                     </tr>
                 }
             </tbody>

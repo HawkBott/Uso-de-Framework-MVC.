@@ -1,4 +1,8 @@
-﻿/* Reset básico y estilos generales */
+﻿
+
+
+
+/* Reset básico y estilos generales */
 body, html {
     margin: 0;
     padding: 0;
@@ -160,59 +164,8 @@ footer {
 }
 
 
-/*Estilos ver detalles*/
 
 
-/* Estilos generales del producto */
-#nombreProducto {
-    color: #34568B;
-    font-family: 'Arial', sans-serif;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-#descripcionProducto {
-    color: #7B7B7B;
-    font-family: 'Helvetica', sans-serif;
-    margin-bottom: 20px;
-}
-
-#precioProducto {
-    color: #DAA520;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-/* Estilos para la sección de cantidad */
-#seccionCantidad {
-    margin-bottom: 20px;
-}
-
-#cantidadProducto {
-    border: 2px solid #5DADE2;
-    border-radius: 5px;
-    padding: 5px;
-    width: 100px;
-}
-
-
-
-/* Estilos para el botón de agregar al carrito */
-#btnAgregarCarrito {
-    background-color: #58D68D;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-    #btnAgregarCarrito:hover {
-        background-color: #45B39D;
-    }
 
 
 
@@ -291,3 +244,86 @@ footer {
 }
 
 
+/*Estilos ver detalles*/
+
+
+/* Estilos para el contenedor principal del detalle del producto */
+.producto-detalle-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para la imagen del producto */
+.detalle-imagen img {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+    .detalle-imagen img:hover {
+        transform: scale(1.05);
+    }
+
+/* Estilos para la información del producto */
+.detalle-info {
+    display: flex;
+    flex-direction: column;
+    max-width: 60%;
+}
+
+.detalle-nombre {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.detalle-id, .detalle-descripcion, .detalle-precio {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* Estilo especial para el precio */
+.detalle-precio {
+    color: #008000;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Estilos para el formulario y elementos de cantidad */
+.detalle-cantidad {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .detalle-cantidad label {
+        margin-right: 10px;
+        color: #333;
+    }
+
+    .detalle-cantidad input {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+/* Estilos para el botón de agregar al carrito */
+.detalle-btnAgregar {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .detalle-btnAgregar:hover {
+        background-color: #0056b3;
+    }

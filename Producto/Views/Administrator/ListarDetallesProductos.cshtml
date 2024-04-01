@@ -6,8 +6,9 @@
 
 <div class="container">
     <div class="header">
-        <h2>Listado de Productos</h2>
+        <center><h2>Detalles De Los Productos</h2></center>
     </div>
+    <br />
 
     <div class="table-responsive">
         <table class="table">
@@ -29,8 +30,8 @@
                         <td>@item.Nombre</td>
                         <td>@item.Cantidad</td>
                         <td>@item.Descripcion</td>
-                        <td>@item.Precio</td>
-                        <td>@item.Foto</td>
+                        <td>@Html.DisplayFor(modelItem => item.Precio, "{0:C}")</td>
+                        <td><img src="@Url.Content("~/assets/imagenes/" + item.Foto)" alt="@item.Nombre" width="100" /></td>
                     </tr>
                 }
             </tbody>

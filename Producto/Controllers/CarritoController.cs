@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -27,9 +28,31 @@ namespace Producto.Controllers
             }
 
             int usuarioId = (int)Session["UsuarioId"];
-            _productoBLL.AgregarAlCarrito(usuarioId, productoId, cantidad);
-            return RedirectToAction("Index", "Comprador");
+
+            _productoBLL.AgregarProductoAlCarrito(usuarioId, productoId, cantidad);
+
+            // Redirige al usuario de vuelta a la página del carrito después de agregar el producto
+            return RedirectToAction("DetallesDelProductoEnCarrito", "Carrito");
         }
+
+
+        [HttpPost]
+        public ActionResult RealizarCompra()
+        {
+            if (Session["UsuarioId"] == null)
+            {
+                // Redirige al usuario a la página de inicio de sesión si la sesión ha expirado
+                return RedirectToAction("Login", "Authentication");
+            }
+
+            int usuarioId = (int)Session["UsuarioId"];
+
+            _productoBLL.RealizarCompra(usuarioId);
+
+            // Redirige al usuario de vuelta a la página del carrito después de realizar la compra
+            return RedirectToAction("DetallesDelProductoEnCarrito", "Carrito");
+        }
+
 
 
         // method for see details of producto in carrito
@@ -67,65 +90,24 @@ namespace Producto.Controllers
         }
 
 
-
-
-
         [HttpPost]
-        public ActionResult RealizarCompra()
+        public ActionResult CancelarCompra()
         {
-            try
+            if (Session["UsuarioId"] == null)
             {
-                // Obtén el CarritoId del usuario actual
-                int carritoId = (int)Session["CarritoId"];
+                // Redirige al usuario a la página de inicio de sesión si la sesión ha expirado
+                return RedirectToAction("Login", "Authentication");
+            }
 
-                // Registra la compra
-                _productoBLL.RegistrarCompra(carritoId);
+            int usuarioId = (int)Session["UsuarioId"];
+            _productoBLL.CancelarCompra(usuarioId);
 
-                // Retorna una vista de éxito en un controlador específico
-                return RedirectToAction("Index", "Comprador");
-            }
-            catch (NullReferenceException ex)
-            {
-                // Captura excepciones para referencias nulas, como un Session["CarritoId"] que podría no estar definido
-                Console.WriteLine($"Error de referencia nula: {ex.Message}");
-                return View("DetallesDelProductoEnCarrito"); // Retorna una vista de error genérica
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Captura excepciones para operaciones inválidas, como intentar registrar una compra con un ID inválido
-                Console.WriteLine($"Operación inválida: {ex.Message}");
-                return View("DetallesDelProductoEnCarrito"); // Retorna una vista de error genérica
-            }
-            catch (SqlException ex)
-            {
-                // Captura excepciones relacionadas con la base de datos
-                Console.WriteLine($"Error de base de datos: {ex.Message}");
-                return View("DetallesDelProductoEnCarrito"); // Retorna una vista de error genérica
-            }
-            catch (Exception ex)
-            {
-                // Captura cualquier otra excepción no manejada específicamente
-                Console.WriteLine($"Excepción no manejada: {ex.Message}");
-                return View("DetallesDelProductoEnCarrito"); // Retorna una vista de error genérica
-            }
+            return RedirectToAction("DetallesDelProductoEnCarrito", "Carrito");
         }
 
 
 
-        [HttpPost]
-        public ActionResult CancelarCompra(int usuarioId)
-        {
-            try
-            {
-                _productoBLL.CancelarCompra(usuarioId);
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Excepción no manejada: {ex.Message}");
-                return View("DetallesDelProductoEnCarrito"); // Retorna una vista de error genérica
-            }
-        }
+
 
 
 

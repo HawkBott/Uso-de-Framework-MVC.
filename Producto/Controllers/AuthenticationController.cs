@@ -33,7 +33,7 @@ namespace Producto.Controllers
             if (resultado.IsAuthenticated)
             {
                 // Imprimir el correo electrónico del usuario en la consola
-                System.Diagnostics.Debug.WriteLine("Correo electrónico del usuario: " + myEmail);
+                /*System.Diagnostics.Debug.WriteLine("Correo electrónico del usuario: " + myEmail);*/
 
                 // Obtener el ID del usuario
                 int idUsuario = negocios.ObtenerIdUsuario(myEmail);
@@ -58,15 +58,24 @@ namespace Producto.Controllers
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Correo electrónico o contraseña incorrectos");
+                /*System.Diagnostics.Debug.WriteLine("Correo electrónico o contraseña incorrectos");*/
                 return View();
             }
         }
 
 
 
-
         
+        public ActionResult Logout()
+        {
+            Session.Clear(); // Esto eliminará todas las variables de sesión
+            return RedirectToAction("Login", "Authentication");
+        }
+
+
+
+
+
 
 
 

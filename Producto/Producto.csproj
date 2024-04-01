@@ -106,7 +106,6 @@
     <Content Include="assets\imagenes\monitor.png" />
     <Content Include="assets\imagenes\mouse.png" />
     <Content Include="assets\imagenes\teclado.png" />
-    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
@@ -154,15 +153,14 @@
     <Content Include="Views\Authentication\Login.cshtml" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
-    <Content Include="Views\Comprador\CatalogoComprador.cshtml" />
     <Content Include="Views\Comprador\MostrarUsuarios.cshtml" />
     <Content Include="Views\Comprador\Index.cshtml" />
     <Content Include="Views\Comprador\VerDetalles.cshtml" />
     <Content Include="Views\Shared\Comprador\_Layout.cshtml" />
     <Content Include="Views\Carrito\DetallesDelProductoEnCarrito.cshtml" />
     <Content Include="Views\Carrito\AgregarAlCarrito.cshtml" />
-    <Content Include="Views\Authentication\CerrarSesion.cshtml" />
     <Content Include="Views\Administrator\AltaProducto.cshtml" />
+    <Content Include="Views\Authentication\Logout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

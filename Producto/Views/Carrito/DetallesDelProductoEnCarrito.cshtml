@@ -59,13 +59,11 @@
 <div id="accionesCarrito">
     @using (Html.BeginForm("RealizarCompra", "Carrito", FormMethod.Post))
     {
-        <input type="submit" value="Realizar Compra" id="btnRealizarCompra" />
+        <input id="btnRealizarCompra" type="submit" value="Registrar Compra" />
     }
     <br />
     @using (Html.BeginForm("CancelarCompra", "Carrito", FormMethod.Post))
     {
-        @Html.Hidden("usuarioId", (int)Session["UsuarioId"])
-        <input type="submit" value="Cancelar Compra" id="btnCancelarCompra" />
+        <input id="btnCancelarCompra" type="submit" value="Cancelar Compra" />
     }
 </div>
-

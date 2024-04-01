@@ -13,7 +13,7 @@
         <p>Precio: @Model.Precio.ToString("C")</p>
         <p>Cantidad disponible: @Model.Cantidad</p>
 
-        using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+        using (Html.BeginForm("AgregarAlCarrito", "Carrito", FormMethod.Post))
         {
             @Html.Hidden("productoId", Model.Id)
             <label for="cantidad">Cantidad:</label>

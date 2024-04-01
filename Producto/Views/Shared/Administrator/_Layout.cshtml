@@ -19,7 +19,7 @@
 <body>
 
     <header>
-        <!-- Navbar mejorado con dropdowns y iconos, ahora en color negro -->
+        
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <a class="navbar-brand" href="Index">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupported" aria-controls="navbarSupported" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,12 @@
                     <li class="nav-item"><a class="nav-link" href="MostrarUsuarios">Listado de Usuarios <i class="fas fa-users"></i></a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Artículos Comprados <i class="fas fa-shopping-cart"></i></a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Clientes por Artículo <i class="fas fa-user-tag"></i></a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Clientes por Artículo <i class="fas fa-user-tag"></i></a></li>
+                    
+
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Logout", "Authentication")">Salir <i class="fas fa-sign-out-alt"></i></a></li>
+
                 </ul>
 
             </div>

@@ -3,16 +3,25 @@
     ViewBag.Title = "Catálogo de Artículos";
     Layout = "~/Views/Shared/Comprador/_Layout.cshtml";
 }
-<h2 id="nombreProducto">@Model.Nombre</h2>
-<p id="descripcionProducto">@Model.Descripcion</p>
-<p id="precioProducto">@Model.Precio.ToString("C")</p>
 
-@using (Html.BeginForm("AgregarAlCarrito", "Carrito", FormMethod.Post))
-{
-    @Html.Hidden("productoId", Model.Id)
-    <div id="seccionCantidad">
-        <label for="cantidadProducto">Cantidad:</label>
-        <input type="number" id="cantidadProducto" name="cantidad" min="1" max="@Model.Cantidad" value="0" />
+<div class="producto-detalle-container">
+    <div class="detalle-imagen">
+        <img src="@Url.Content("~/assets/imagenes/" + Model.Foto)" alt="@Model.Nombre" width="300" />
     </div>
-    <input type="submit" id="btnAgregarCarrito" value="Agregar al carrito" />
-}
+    <div class="detalle-info">
+        <h2 class="detalle-nombre">@Model.Nombre</h2>
+        <p class="detalle-id">ID: @Model.Id</p>
+        <p class="detalle-descripcion">@Model.Descripcion</p>
+        <p class="detalle-precio">@Model.Precio.ToString("C")</p>
+
+        @using (Html.BeginForm("AgregarAlCarrito", "Carrito", FormMethod.Post))
+        {
+            @Html.Hidden("productoId", Model.Id)
+            <div class="detalle-cantidad">
+                <label for="detalleCantidadProducto">Cantidad:</label>
+                <input type="number" id="detalleCantidadProducto" name="cantidad" min="1" max="@Model.Cantidad" value="1" />
+            </div>
+            <input type="submit" class="detalle-btnAgregar" value="Agregar al carrito" />
+        }
+    </div>
+</div>

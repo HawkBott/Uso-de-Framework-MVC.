@@ -93,7 +93,7 @@ namespace Producto.Capa.DAL
                 catch (Exception ex)
                 {
                     // Manejo de la excepción
-                    Console.WriteLine(ex.Message);
+                    /*Console.WriteLine(ex.Message);*/
                     resultado.IsAuthenticated = false;
                     resultado.Role = null;
                 }
@@ -150,7 +150,7 @@ namespace Producto.Capa.DAL
                 catch (Exception ex)
                 {
                     // Manejo de la excepción
-                    Console.WriteLine(ex.Message);
+                    /*Console.WriteLine(ex.Message);*/
                 }
                 finally
                 {
@@ -256,41 +256,98 @@ namespace Producto.Capa.DAL
         //----------------------ALL CARRITO------------------------//
 
         //Metodo para agregar un producto al carrito tomando como referencia el id del producto y el id del comprador
-        public void AgregarAlCarrito(int usuarioId, int productoId, int cantidad)
+        public void AgregarProductoAlCarrito(int usuarioId, int productoId, int cantidad)
         {
-            Debug.WriteLine($"Iniciando conexión a la base de datos para AgregarAlCarrito. UsuarioId: {usuarioId}, ProductoId: {productoId}, Cantidad: {cantidad}");
-            try
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                using (SqlConnection con = new SqlConnection(connectionString))
+                con.Open();
+
+                // Comprueba si el usuario ya tiene un carrito
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Carrito WHERE UsuarioId = @UsuarioId", con);
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                int count = (int)cmd.ExecuteScalar();
+
+                // Si el usuario no tiene un carrito, crea uno
+                if (count == 0)
                 {
-                    using (SqlCommand cmd = new SqlCommand("AgregarAlCarrito", con))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.Add(new SqlParameter("@UsuarioId", usuarioId));
-                        cmd.Parameters.Add(new SqlParameter("@ProductoId", productoId));
-                        cmd.Parameters.Add(new SqlParameter("@Cantidad", cantidad));
-
-                        con.Open();
-                        Debug.WriteLine("Conexión a la base de datos abierta.");
-                        cmd.ExecuteNonQuery();
-                        Debug.WriteLine("Stored Procedure ejecutado exitosamente.");
-                    }
+                    cmd = new SqlCommand("INSERT INTO Carrito (UsuarioId) VALUES (@UsuarioId)", con);
+                    cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                    cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error al intentar ejecutar el stored procedure AgregarAlCarrito: {ex.Message}");
-                throw; // O maneja la excepción de manera que consideres apropiada
+
+                // Obtiene el ID del carrito del usuario
+                cmd = new SqlCommand("SELECT CarritoId FROM Carrito WHERE UsuarioId = @UsuarioId", con);
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                int carritoId = (int)cmd.ExecuteScalar();
+
+                // Agrega el producto al carrito
+                cmd = new SqlCommand("INSERT INTO CarritoProductos (CarritoId, ProductoId, Cantidad) VALUES (@CarritoId, @ProductoId, @Cantidad)", con);
+                cmd.Parameters.AddWithValue("@CarritoId", carritoId);
+                cmd.Parameters.AddWithValue("@ProductoId", productoId);
+                cmd.Parameters.AddWithValue("@Cantidad", cantidad);
+                cmd.ExecuteNonQuery();
+
+                con.Close();
             }
         }
+
+        public void RealizarCompra(int usuarioId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                // Obtiene el ID del carrito del usuario
+                SqlCommand cmd = new SqlCommand("SELECT CarritoId FROM Carrito WHERE UsuarioId = @UsuarioId", con);
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                int carritoId = (int)cmd.ExecuteScalar();
+
+                // Realiza la compra
+                cmd = new SqlCommand("EXEC RealizarCompra @UsuarioId", con);
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+            }
+        }
+
+
+        public void CancelarCompra(int usuarioId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                // Comprueba si el usuario ya tiene un carrito
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Carrito WHERE UsuarioId = @UsuarioId", con);
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                int count = (int)cmd.ExecuteScalar();
+
+                // Si el usuario tiene un carrito, cancela la compra
+                if (count > 0)
+                {
+                    // Obtiene el ID del carrito del usuario
+                    cmd = new SqlCommand("SELECT CarritoId FROM Carrito WHERE UsuarioId = @UsuarioId", con);
+                    cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                    int carritoId = (int)cmd.ExecuteScalar();
+
+                    // Ejecuta el procedimiento almacenado para cancelar la compra
+                    cmd = new SqlCommand("EXEC CancelarCompra @UsuarioId", con);
+                    cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                con.Close();
+            }
+        }
+
 
 
         //Metodo para obtener los detatalles del producto que se visualizara antes de confirmar la compra
         public DataTable ObtenerDetallesDelProductoEnCarrito(int usuarioId)
         {
             con.Open();
-            SqlCommand cmd = new SqlCommand("SELECT p.Id, p.Nombre, c.Cantidad, p.Descripcion, p.Precio, p.Foto FROM Carrito c INNER JOIN Productos p ON c.ProductoId = p.Id WHERE c.UsuarioId = @UsuarioId", con);
+            SqlCommand cmd = new SqlCommand("SELECT p.Id, p.Nombre, cp.Cantidad, p.Descripcion, p.Precio, p.Foto FROM Carrito c INNER JOIN CarritoProductos cp ON c.CarritoId = cp.CarritoId INNER JOIN Productos p ON cp.ProductoId = p.Id WHERE c.UsuarioId = @UsuarioId", con);
             cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -301,11 +358,12 @@ namespace Producto.Capa.DAL
 
 
 
+
         public DataTable GetTotalPorUsuario(int usuarioId)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT Usuarios.NombreCompleto, SUM(Carrito.Cantidad * Productos.Precio) AS Total FROM Carrito JOIN Usuarios ON Carrito.UsuarioId = Usuarios.Id JOIN Productos ON Carrito.ProductoId = Productos.Id WHERE Usuarios.Id = @UsuarioId GROUP BY Usuarios.NombreCompleto", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT Usuarios.NombreCompleto, SUM(CarritoProductos.Cantidad * Productos.Precio) AS Total FROM Carrito JOIN Usuarios ON Carrito.UsuarioId = Usuarios.Id JOIN CarritoProductos ON Carrito.CarritoId = CarritoProductos.CarritoId JOIN Productos ON CarritoProductos.ProductoId = Productos.Id WHERE Usuarios.Id = @UsuarioId GROUP BY Usuarios.NombreCompleto", con))
                 {
                     cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
                     con.Open();
@@ -335,60 +393,16 @@ namespace Producto.Capa.DAL
 
 
 
-        public void RegistrarCompra(int carritoId)
-        {
-            try
-            {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Compras (CarritoId) VALUES (@CarritoId)", con))
-                {
-                    cmd.Parameters.Add("@CarritoId", SqlDbType.Int).Value = carritoId;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.ExecuteNonQuery();
-                }
 
-                // Eliminar los elementos del carrito después de la compra
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Carrito WHERE CarritoId = @CarritoId", con))
-                {
-                    cmd.Parameters.Add("@CarritoId", SqlDbType.Int).Value = carritoId;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Manejar excepción
-                throw new Exception("Error al registrar la compra: " + ex.Message);
-            }
-            finally
-            {
-                con.Close();
-            }
-        }
 
-        public void CancelarCompra(int usuarioId)
-        {
-            try
-            {
-                con.Open();
-                // Eliminar todos los elementos del carrito de un usuario específico
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Carrito WHERE UsuarioId = @UsuarioId", con))
-                {
-                    cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Manejar excepción
-                throw new Exception("Error al cancelar la compra: " + ex.Message);
-            }
-            finally
-            {
-                con.Close();
-            }
-        }
+
+
+
+
+
+
+
+
 
 
 
@@ -522,6 +536,56 @@ namespace Producto.Capa.DAL
         }
 
 
+
+
+
+
+        
+
+
+
+
+
+        public List<Entities.Producto> ObtenerProductosCarrito(int usuarioId)
+        {
+            List<Entities.Producto> productosCarrito = new List<Entities.Producto>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string query = "SELECT p.Id, p.Nombre, cp.Cantidad, p.Descripcion, p.Precio, p.Foto " +
+                               "FROM Carrito c " +
+                               "JOIN CarritoProductos cp ON c.CarritoId = cp.CarritoId " +
+                               "JOIN Productos p ON cp.ProductoId = p.Id " +
+                               "WHERE c.UsuarioId = @UsuarioId";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Entities.Producto producto = new Entities.Producto
+                            {
+                                Id = reader.GetInt32(0),
+                                Nombre = reader.GetString(1),
+                                Cantidad = reader.GetInt32(2),
+                                Descripcion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                Precio = reader.GetDecimal(4),
+                                Foto = reader.IsDBNull(5) ? null : reader.GetString(5)
+                            };
+
+                            productosCarrito.Add(producto);
+                        }
+                    }
+                }
+            }
+
+            return productosCarrito;
+        }
 
 
 
